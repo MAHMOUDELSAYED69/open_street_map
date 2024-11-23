@@ -78,21 +78,9 @@ class _MapScreenState extends State<MapScreen> {
           FloatingSearchBarWidget(mapController: _mapController),
         ],
       ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FloatingActionButton(
-            onPressed: () => viewModel.toggleDriverMode(),
-            tooltip: 'Toggle Driver Mode',
-            backgroundColor: viewModel.isDriverMode ? Colors.green : Colors.grey,
-            child: const Icon(Icons.drive_eta),
-          ),
-          const SizedBox(height: 10),
-          FloatingActionButtonWidgets(
-            viewModel: viewModel,
-            mapController: _mapController,
-          ),
-        ],
+      floatingActionButton: FloatingActionButtonWidgets(
+        viewModel: viewModel,
+        mapController: _mapController,
       ),
     );
   }

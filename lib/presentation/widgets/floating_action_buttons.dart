@@ -19,6 +19,13 @@ class FloatingActionButtonWidgets extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        FloatingActionButton(
+          onPressed: () => viewModel.toggleDriverMode(),
+          tooltip: 'Toggle Driver Mode',
+          backgroundColor: viewModel.isDriverMode ? Colors.green : Colors.grey,
+          child: const Icon(Icons.drive_eta),
+        ),
+        const SizedBox(height: 10),
         FloatingActionButton.small(
           heroTag: "search_location",
           onPressed: () {
