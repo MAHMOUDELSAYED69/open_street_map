@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:open_street_map/utils/constants/images.dart';
 
 import '../../data/model/maps_models.dart';
 import '../../data/repository/map_repository.dart';
@@ -17,8 +20,49 @@ class MapViewModel extends ChangeNotifier {
   List<Marker> markers = [];
   bool isSearching = false;
   bool isLoading = false;
+  bool isDriverMode = false;
+  StreamSubscription<LatLng>? _locationSubscription;
 
   MapViewModel(this.mapsRepository, this.locationService);
+
+  void toggleDriverMode() {
+    isDriverMode = !isDriverMode;
+    if (isDriverMode) {
+      startDriverMode();
+    } else {
+      stopDriverMode();
+    }
+    notifyListeners();
+  }
+
+  void startDriverMode() {
+    locationService.onLocationChanged().listen((newLocation) {
+      currentLocation = newLocation;
+      updateDriverMarker(newLocation);
+      notifyListeners();
+    });
+  }
+
+  void stopDriverMode() {
+    _locationSubscription?.cancel();
+    _locationSubscription = null;
+    markers.removeWhere((marker) => marker.point == currentLocation);
+    isDriverMode = false;
+
+    notifyListeners();
+  }
+
+  void updateDriverMarker(LatLng newLocation) {
+    markers.removeWhere((marker) => marker.point == currentLocation);
+    markers.add(
+      Marker(
+        width: 50.0,
+        height: 50.0,
+        point: newLocation,
+        child: const Icon(Icons.directions_car, size: 30, color: Colors.green),
+      ),
+    );
+  }
 
   Future<void> fetchCurrentLocation() async {
     final location = await locationService.getCurrentLocation();
@@ -27,13 +71,27 @@ class MapViewModel extends ChangeNotifier {
 
       markers.add(
         Marker(
-          width: 80.0,
-          height: 80.0,
+          width: 200.0,
+          height: 200.0,
           point: currentLocation!,
-          child: const Icon(
-            Icons.my_location_rounded,
-            color: Colors.blue,
-            size: 40.0,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.transparent,
+                    border: Border.all(
+                      color: Colors.blueAccent,
+                      width: 2.0,
+                    )),
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.blue.withOpacity(0.3),
+                ),
+              ),
+              Image.asset(ImageManager.currentLocation, width: 40, height: 40)
+            ],
           ),
         ),
       );
@@ -67,14 +125,10 @@ class MapViewModel extends ChangeNotifier {
 
     markers.add(
       Marker(
-        width: 80.0,
-        height: 80.0,
+        width: 40.0,
+        height: 40.0,
         point: destination,
-        child: const Icon(
-          Icons.location_on,
-          color: Colors.red,
-          size: 40.0,
-        ),
+        child: Image.asset(ImageManager.searchedLocation),
       ),
     );
 
@@ -116,13 +170,27 @@ class MapViewModel extends ChangeNotifier {
     final currentLocationMarker = markers.firstWhere(
       (marker) => marker.point == currentLocation,
       orElse: () => Marker(
-        width: 80.0,
-        height: 80.0,
+        width: 200.0,
+        height: 200.0,
         point: currentLocation!,
-        child: const Icon(
-          Icons.my_location_rounded,
-          color: Colors.blue,
-          size: 40.0,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.transparent,
+                  border: Border.all(
+                    color: Colors.blue,
+                    width: 2.0,
+                  )),
+              child: CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.blue.withOpacity(0.3),
+              ),
+            ),
+            Image.asset(ImageManager.currentLocation, width: 40, height: 40)
+          ],
         ),
       ),
     );
@@ -146,9 +214,7 @@ void _showDetailsDialog(BuildContext context, String content) {
         actions: <Widget>[
           TextButton(
             child: const Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       );
