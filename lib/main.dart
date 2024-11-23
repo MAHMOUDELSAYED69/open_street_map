@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -46,15 +47,26 @@ class MyApp extends StatelessWidget {
       create: (_) => MapViewModel(mapsRepository, locationService),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        title: 'Open Street Map',
         routes: {
-          RouteManager.initial: (BuildContext context) => const SplashScreen(),
-          RouteManager.map: (BuildContext context) => const MapScreen(),
-          RouteManager.settings: (BuildContext context) => const Scaffold(),
+          RouteManager.initial: (_) => const SplashScreen(),
+          RouteManager.map: (_) => const MapScreen(),
+          RouteManager.settings: (_) => const Scaffold(),
         },
-        initialRoute: RouteManager.initial,
+        initialRoute: kIsWeb ? RouteManager.map : RouteManager.initial,
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          primaryColor: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          appBarTheme: const AppBarTheme(
+            color: Colors.blue,
+          ),
+          buttonTheme: const ButtonThemeData(
+            buttonColor: Colors.blue,
+          ),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: Colors.blue,
+          ),
         ),
       ),
     );
