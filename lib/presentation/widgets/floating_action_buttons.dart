@@ -21,14 +21,15 @@ class FloatingActionButtonWidgets extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // _buildTooltipButton(
-        //   name: "Test",
-        //   heroTag: "test_mode",
-        //   onPressed: () =>
-        //       viewModel.testDriverMode(increase: false, step: 0.005),
-        //   icon: Icons.arrow_circle_up_rounded,
-        // ),
-        // buttonsVerticalSpacing,
+        if (kDebugMode)
+          _buildTooltipSmallButton(
+            name: "Test",
+            heroTag: "test_mode",
+            onPressed: () =>
+                viewModel.testDriverMode(increase: false, step: 0.005),
+            image: ImageManager.test,
+          ),
+        buttonsVerticalSpacing,
         _buildTooltipSmallButton(
           name: "Driver",
           heroTag: "driver_mode",

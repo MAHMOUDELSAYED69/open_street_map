@@ -4,4 +4,5 @@ class ImageManager {
   static const splashMapLogo = 'assets/images/map1.png';
   static const currentLocation = 'assets/images/pin1.png';
   static const car = 'assets/images/car.png';
+  static const test = 'assets/images/test.png';
 }
