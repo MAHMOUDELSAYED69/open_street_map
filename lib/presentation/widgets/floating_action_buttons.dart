@@ -28,7 +28,7 @@ class FloatingActionButtonWidgets extends StatelessWidget {
         //       viewModel.testDriverMode(increase: false, step: 0.005),
         //   icon: Icons.arrow_circle_up_rounded,
         // ),
-        // const SizedBox(height: 10),
+        // buttonsVerticalSpacing,
         _buildTooltipSmallButton(
           name: "Driver",
           heroTag: "driver_mode",

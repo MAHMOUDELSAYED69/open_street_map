@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -62,9 +61,8 @@ class MyApp extends StatelessWidget {
           RouteManager.map: (_) => MapScreen(
                 mapController: mapController,
               ),
-          RouteManager.settings: (_) => const Scaffold(),
         },
-        initialRoute: kIsWeb ? RouteManager.map : RouteManager.initial,
+        initialRoute: RouteManager.initial,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           primaryColor: Colors.blue,
