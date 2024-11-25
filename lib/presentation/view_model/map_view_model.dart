@@ -12,6 +12,7 @@ import '../../data/services/location/location_permission.dart';
 class MapViewModel extends ChangeNotifier {
   final MapsRepositoryInterface mapsRepository;
   final LocationService locationService;
+  final MapController mapController;
 
   LatLng? currentLocation;
   LatLng? destination;
@@ -23,7 +24,7 @@ class MapViewModel extends ChangeNotifier {
   bool isDriverMode = false;
   StreamSubscription<LatLng>? _locationSubscription;
 
-  MapViewModel(this.mapsRepository, this.locationService);
+  MapViewModel(this.mapsRepository, this.locationService, this.mapController);
 
   void toggleDriverMode() {
     isDriverMode = !isDriverMode;
@@ -36,9 +37,16 @@ class MapViewModel extends ChangeNotifier {
   }
 
   void startDriverMode() {
-    locationService.onLocationChanged().listen((newLocation) {
-      currentLocation = newLocation;
-      updateDriverMarker(newLocation);
+    _locationSubscription =
+        locationService.onLocationChanged().listen((newLocation) {
+      if (currentLocation != null && currentLocation != newLocation) {
+        updateDriverMarker(newLocation);
+        currentLocation = newLocation;
+
+        if (destination != null) {
+          getRoute(destination!);
+        }
+      }
       notifyListeners();
     });
   }
@@ -46,22 +54,23 @@ class MapViewModel extends ChangeNotifier {
   void stopDriverMode() {
     _locationSubscription?.cancel();
     _locationSubscription = null;
-    markers.removeWhere((marker) => marker.point == currentLocation);
     isDriverMode = false;
-
     notifyListeners();
   }
 
   void updateDriverMarker(LatLng newLocation) {
-    markers.removeWhere((marker) => marker.point == currentLocation);
+    markers.removeWhere((marker) =>
+        marker.child is Image &&
+        (marker.child as Image).image == AssetImage(ImageManager.car));
     markers.add(
       Marker(
         width: 50.0,
         height: 50.0,
         point: newLocation,
-        child: const Icon(Icons.directions_car, size: 30, color: Colors.green),
+        child: Image.asset(ImageManager.car, width: 50, height: 50),
       ),
     );
+    mapController.move(newLocation, 16.0);
   }
 
   Future<void> fetchCurrentLocation() async {
@@ -121,16 +130,18 @@ class MapViewModel extends ChangeNotifier {
           .toList();
     }
 
-    this.destination = destination;
+    if (this.destination != destination) {
+      this.destination = destination;
 
-    markers.add(
-      Marker(
-        width: 40.0,
-        height: 40.0,
-        point: destination,
-        child: Image.asset(ImageManager.searchedLocation),
-      ),
-    );
+      markers.add(
+        Marker(
+          width: 40.0,
+          height: 40.0,
+          point: destination,
+          child: Image.asset(ImageManager.searchedLocation),
+        ),
+      );
+    }
 
     isLoading = false;
     notifyListeners();
@@ -165,11 +176,14 @@ class MapViewModel extends ChangeNotifier {
     isSearching = false;
     notifyListeners();
   }
-
   void resetMap() {
-    final currentLocationMarker = markers.firstWhere(
-      (marker) => marker.point == currentLocation,
-      orElse: () => Marker(
+    stopDriverMode();
+    markers.clear();
+    routePoints.clear();
+    destination = null;
+
+    markers.add(
+      Marker(
         width: 200.0,
         height: 200.0,
         point: currentLocation!,
@@ -181,7 +195,7 @@ class MapViewModel extends ChangeNotifier {
                   shape: BoxShape.circle,
                   color: Colors.transparent,
                   border: Border.all(
-                    color: Colors.blue,
+                    color: Colors.blueAccent,
                     width: 2.0,
                   )),
               child: CircleAvatar(
@@ -189,35 +203,63 @@ class MapViewModel extends ChangeNotifier {
                 backgroundColor: Colors.blue.withOpacity(0.3),
               ),
             ),
-            Image.asset(ImageManager.currentLocation, width: 40, height: 40)
+            Image.asset(ImageManager.currentLocation, width: 40, height: 40),
           ],
         ),
       ),
     );
 
-    routePoints.clear();
-    destination = null;
-    markers.clear();
-
-    markers.add(currentLocationMarker);
     notifyListeners();
   }
-}
 
-void _showDetailsDialog(BuildContext context, String content) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Place Details'),
-        content: Text(content),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
+  void _showDetailsDialog(BuildContext context, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Place Details'),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void testDriverMode({bool increase = true, double step = 0.001}) {
+    if (currentLocation == null) {
+      debugPrint(
+          "Current location is not set. Please fetch the current location first.");
+      return;
+    }
+
+    stopDriverMode();
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!isDriverMode) {
+        timer.cancel();
+        return;
+      }
+
+      currentLocation = LatLng(
+        currentLocation!.latitude + (increase ? step : -step),
+        currentLocation!.longitude + (increase ? step : -step),
       );
-    },
-  );
+
+      updateDriverMarker(currentLocation!);
+
+      if (destination != null) {
+        getRoute(destination!);
+      }
+
+      notifyListeners();
+    });
+
+    isDriverMode = true;
+    notifyListeners();
+  }
 }
