@@ -19,41 +19,46 @@ class FloatingActionButtonWidgets extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        FloatingActionButton(
-          onPressed: () => viewModel.toggleDriverMode(),
-          tooltip: 'Toggle Driver Mode',
+        _buildTooltipButton(
+          message:
+              viewModel.isDriverMode ? "Disable Test Mode" : "Enable Test Mode",
+          color: viewModel.isDriverMode ? Colors.red : Colors.green,
+          heroTag: "test_mode",
+          onPressed: () =>
+              viewModel.testDriverMode(increase: false, step: 0.005),
           backgroundColor: viewModel.isDriverMode ? Colors.green : Colors.grey,
-          child: const Icon(Icons.drive_eta),
+          icon: Icons.arrow_circle_up_rounded,
         ),
         const SizedBox(height: 10),
-        FloatingActionButton.small(
+        _buildTooltipButton(
+          message: viewModel.isDriverMode
+              ? "Disable Driver Mode"
+              : "Enable Driver Mode",
+          color: viewModel.isDriverMode ? Colors.red : Colors.green,
+          heroTag: "driver_mode",
+          onPressed: () => viewModel.toggleDriverMode(),
+          backgroundColor: viewModel.isDriverMode ? Colors.green : Colors.grey,
+          icon: Icons.drive_eta,
+        ),
+        const SizedBox(height: 10),
+        _buildSmallButton(
           heroTag: "search_location",
           onPressed: () {
             if (viewModel.destination != null) {
               _mapController.move(viewModel.destination!, 16.0);
             }
           },
-          child: Image.asset(
-            ImageManager.searchedLocation,
-            color: Colors.black,
-            width: 20,
-            height: 20,
-          ),
+          asset: ImageManager.searchedLocation,
         ),
         const SizedBox(height: 10),
-        FloatingActionButton.small(
+        _buildSmallButton(
           heroTag: "current_location",
           onPressed: () {
             if (viewModel.currentLocation != null) {
               _mapController.move(viewModel.currentLocation!, 16.0);
             }
           },
-          child: Image.asset(
-            ImageManager.currentLocation,
-            color: Colors.black,
-            width: 20,
-            height: 20,
-          ),
+          asset: ImageManager.currentLocation,
         ),
         const SizedBox(height: 10),
         FloatingActionButton.small(
@@ -65,6 +70,44 @@ class FloatingActionButtonWidgets extends StatelessWidget {
           child: const Icon(Icons.refresh),
         ),
       ],
+    );
+  }
+
+  Widget _buildTooltipButton({
+    required String message,
+    required Color color,
+    required String heroTag,
+    required VoidCallback onPressed,
+    required Color backgroundColor,
+    required IconData icon,
+  }) {
+    return Tooltip(
+      verticalOffset: -60,
+      message: message,
+      decoration: BoxDecoration(color: color),
+      child: FloatingActionButton(
+        heroTag: heroTag,
+        onPressed: onPressed,
+        backgroundColor: backgroundColor,
+        child: Icon(icon),
+      ),
+    );
+  }
+
+  Widget _buildSmallButton({
+    required String heroTag,
+    required VoidCallback onPressed,
+    required String asset,
+  }) {
+    return FloatingActionButton.small(
+      heroTag: heroTag,
+      onPressed: onPressed,
+      child: Image.asset(
+        asset,
+        color: Colors.black,
+        width: 20,
+        height: 20,
+      ),
     );
   }
 }
