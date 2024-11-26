@@ -30,6 +30,7 @@ class _MapScreenState extends State<MapScreen> {
     final viewModel = Provider.of<MapViewModel>(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         fit: StackFit.expand,
         children: [
