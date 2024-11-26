@@ -12,7 +12,6 @@ import '../../data/services/location/location_permission.dart';
 class MapViewModel extends ChangeNotifier {
   final MapsRepositoryInterface mapsRepository;
   final LocationService locationService;
-  final MapController mapController;
 
   LatLng? currentLocation;
   LatLng? destination;
@@ -24,7 +23,7 @@ class MapViewModel extends ChangeNotifier {
   bool isDriverMode = false;
   StreamSubscription<LatLng>? _locationSubscription;
 
-  MapViewModel(this.mapsRepository, this.locationService, this.mapController);
+  MapViewModel(this.mapsRepository, this.locationService,);
 
   void toggleDriverMode() {
     isDriverMode = !isDriverMode;
@@ -39,16 +38,16 @@ class MapViewModel extends ChangeNotifier {
   void startDriverMode() {
     _locationSubscription =
         locationService.onLocationChanged().listen((newLocation) {
-      if (currentLocation != null && currentLocation != newLocation) {
-        updateDriverMarker(newLocation);
-        currentLocation = newLocation;
+      currentLocation = newLocation;
+      updateDriverMarker(newLocation);
 
-        if (destination != null) {
-          getRoute(destination!);
-        }
+      if (destination != null) {
+        getRoute(destination!);
       }
       notifyListeners();
     });
+    isDriverMode = true;
+    notifyListeners();
   }
 
   void stopDriverMode() {
@@ -70,8 +69,18 @@ class MapViewModel extends ChangeNotifier {
         child: Image.asset(ImageManager.car, width: 50, height: 50),
       ),
     );
-    mapController.move(newLocation, 16.0);
+    // startCameraUpdate();
   }
+
+  // void startCameraUpdate() {
+  //   Timer(const Duration(minutes: 1), () {
+  //     if (isDriverMode && currentLocation != null ||
+  //         isDriverMode != false && currentLocation != null) {
+  //       mapController.move(currentLocation!, 16.0);
+  //       startCameraUpdate();
+  //     }
+  //   });
+  // }
 
   Future<void> fetchCurrentLocation() async {
     final location = await locationService.getCurrentLocation();
@@ -176,6 +185,7 @@ class MapViewModel extends ChangeNotifier {
     isSearching = false;
     notifyListeners();
   }
+
   void resetMap() {
     stopDriverMode();
     markers.clear();

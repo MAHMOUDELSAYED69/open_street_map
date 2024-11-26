@@ -28,7 +28,6 @@ class AppRouter {
             create: (_) => MapViewModel(
               mapsRepository,
               locationService,
-              mapController,
             ),
             child: MapScreen(
               mapController: mapController,
