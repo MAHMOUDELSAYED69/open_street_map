@@ -1,1 +1,9 @@
-{}
+{
+  "projects": {
+    "firebase deploy": "open-street-map-c5426",
+    "default": "open-street-map-c5426",
+    "firebase deploy --only hosting": "open-street-map-c5426"
+  },
+  "targets": {},
+  "etags": {}
+}

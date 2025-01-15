@@ -19,7 +19,7 @@ class AppRouter {
         return PageTransitionManager.fadeTransition(const SplashScreen());
       case RouteManager.map:
         final dio = Dio();
-        final mapsApi = MapsApi(dio);
+        final mapsApi = MapsWebService(dio);
         final mapsRepository = MapsRepository(mapsApi);
         final locationService = LocationService();
         final mapController = MapController();

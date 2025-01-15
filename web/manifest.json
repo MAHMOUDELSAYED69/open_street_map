@@ -1,6 +1,6 @@
 {
-    "name": "open_street_map",
-    "short_name": "open_street_map",
+    "name": "Open Street Map",
+    "short_name": "Open Street Map",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

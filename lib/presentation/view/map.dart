@@ -31,7 +31,7 @@ class _MapScreenState extends State<MapScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      // drawer: Drawer(),
+      drawer: Drawer(),
       body: Stack(
         fit: StackFit.expand,
         children: [

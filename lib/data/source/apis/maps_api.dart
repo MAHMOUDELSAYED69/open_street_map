@@ -10,16 +10,16 @@ abstract class MapsApiInterface {
   Future<List<Map<String, dynamic>>> searchLocation(String query);
 }
 
-class MapsApi implements MapsApiInterface {
-  final Dio dio;
+class MapsWebService implements MapsApiInterface {
+  final Dio _dio;
 
-  MapsApi(this.dio);
+  MapsWebService(this._dio);
 
   @override
   Future<Map<String, dynamic>?> getRoute(
       LatLng start, LatLng destination) async {
     try {
-      final response = await dio.get(
+      final response = await _dio.get(
         '${ApiManager.directionsBaseUrl}/${ApiManager.directionsEndPoint}',
         queryParameters: {
           'api_key': ApiManager.apiKey,
@@ -44,7 +44,7 @@ class MapsApi implements MapsApiInterface {
   @override
   Future<Map<String, dynamic>?> getPlaceDetails(LatLng point) async {
     try {
-      final response = await dio.get(
+      final response = await _dio.get(
         '${ApiManager.placesBaseUrl}/${ApiManager.addressDetailsEndPoint}',
         queryParameters: {
           'lat': point.latitude,
@@ -70,7 +70,7 @@ class MapsApi implements MapsApiInterface {
   @override
   Future<List<Map<String, dynamic>>> searchLocation(String query) async {
     try {
-      final response = await dio.get(
+      final response = await _dio.get(
         '${ApiManager.placesBaseUrl}/${ApiManager.searchEndPoint}',
         queryParameters: {
           'q': '$query,Egypt',

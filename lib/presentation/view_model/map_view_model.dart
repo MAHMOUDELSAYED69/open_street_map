@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:open_street_map/core/utils/constants/images.dart';
 
+import '../../core/utils/constants/images.dart';
 import '../../data/model/maps_models.dart';
 import '../../data/repository/map_repository.dart';
 import '../../core/services/location/location_permission.dart';
@@ -23,7 +23,10 @@ class MapViewModel extends ChangeNotifier {
   bool isDriverMode = false;
   StreamSubscription<LatLng>? _locationSubscription;
 
-  MapViewModel(this.mapsRepository, this.locationService,);
+  MapViewModel(
+    this.mapsRepository,
+    this.locationService,
+  );
 
   void toggleDriverMode() {
     isDriverMode = !isDriverMode;

@@ -63,7 +63,7 @@ class FloatingActionButtonWidgets extends StatelessWidget {
             viewModel.resetMap();
             _mapController.move(viewModel.currentLocation!, 10.0);
           },
-          child: const Icon(Icons.refresh),
+          child: const Icon(Icons.refresh, color: Colors.black),
         ),
       ],
     );
