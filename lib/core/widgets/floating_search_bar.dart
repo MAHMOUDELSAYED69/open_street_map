@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
-import 'package:open_street_map/presentation/widgets/loading_indicator.dart';
+import 'package:open_street_map/core/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
-import '../view_model/map_view_model.dart';
+import '../../presentation/view_model/map_view_model.dart';
 
 class FloatingSearchBarWidget extends StatelessWidget {
   const FloatingSearchBarWidget({super.key, required this.mapController});

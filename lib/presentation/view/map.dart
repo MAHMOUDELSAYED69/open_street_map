@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
 import '../view_model/map_view_model.dart';
-import '../widgets/floating_action_buttons.dart';
-import '../widgets/floating_search_bar.dart';
-import '../widgets/loading_indicator.dart';
+import '../../core/widgets/floating_action_buttons.dart';
+import '../../core/widgets/floating_search_bar.dart';
+import '../../core/widgets/loading_indicator.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key, required this.mapController});
@@ -31,6 +31,7 @@ class _MapScreenState extends State<MapScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      // drawer: Drawer(),
       body: Stack(
         fit: StackFit.expand,
         children: [

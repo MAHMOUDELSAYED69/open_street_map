@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/constants/routes.dart';
-import 'app_router.dart';
+import 'core/utils/constants/routes.dart';
+import 'core/router/app_router.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({

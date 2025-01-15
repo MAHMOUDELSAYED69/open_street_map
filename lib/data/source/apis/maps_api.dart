@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../../../utils/constants/apis.dart';
+import '../../../core/utils/constants/apis.dart';
 
 abstract class MapsApiInterface {
   Future<Map<String, dynamic>?> getRoute(LatLng start, LatLng destination);

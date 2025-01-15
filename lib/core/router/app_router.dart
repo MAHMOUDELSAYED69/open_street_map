@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:open_street_map/presentation/view/map.dart';
 import 'package:provider/provider.dart';
-import '../presentation/view/splash.dart';
-import '../presentation/view_model/map_view_model.dart';
+import '../../presentation/view/splash.dart';
+import '../../presentation/view_model/map_view_model.dart';
 import '../utils/constants/routes.dart';
-import '../data/repository/map_repository.dart';
-import '../data/services/apis/maps_api.dart';
-import '../data/services/location/location_permission.dart';
+import '../../data/repository/map_repository.dart';
+import '../../data/source/apis/maps_api.dart';
+import '../services/location/location_permission.dart';
+import 'page_transition.dart';
 
 class AppRouter {
   const AppRouter._();
@@ -44,23 +45,5 @@ class AppRouter {
           ),
         );
     }
-  }
-}
-
-class PageTransitionManager {
-  const PageTransitionManager._();
-
-  static PageRouteBuilder fadeTransition(Widget screen,
-      [int milliseconds = 300]) {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => screen,
-      transitionDuration: Duration(milliseconds: milliseconds),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
-      },
-    );
   }
 }

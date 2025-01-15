@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:open_street_map/utils/constants/animations.dart';
+import 'package:open_street_map/core/utils/constants/animations.dart';
 
 class MyCircularLoadingIndicator extends StatelessWidget {
   const MyCircularLoadingIndicator({super.key});

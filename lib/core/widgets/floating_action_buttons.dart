@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
-import '../../utils/constants/images.dart';
-import '../view_model/map_view_model.dart';
+import '../utils/constants/images.dart';
+import '../../presentation/view_model/map_view_model.dart';
 
 class FloatingActionButtonWidgets extends StatelessWidget {
   const FloatingActionButtonWidgets({

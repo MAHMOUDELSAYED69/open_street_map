@@ -1,6 +1,6 @@
 import 'package:latlong2/latlong.dart';
 import '../model/maps_models.dart';
-import '../services/apis/maps_api.dart';
+import '../source/apis/maps_api.dart';
 
 abstract class MapsRepositoryInterface {
   Future<RouteResponse?> fetchRoute(LatLng start, LatLng destination);

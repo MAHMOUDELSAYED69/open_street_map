@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:open_street_map/utils/constants/animations.dart';
-import 'package:open_street_map/utils/constants/routes.dart';
+import 'package:open_street_map/core/utils/constants/animations.dart';
+import 'package:open_street_map/core/utils/constants/routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
