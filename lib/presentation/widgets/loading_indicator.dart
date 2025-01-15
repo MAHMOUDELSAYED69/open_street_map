@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:open_street_map/utils/constants/animations.dart';
@@ -10,7 +11,18 @@ class MyCircularLoadingIndicator extends StatelessWidget {
     return SizedBox(
       height: 100,
       width: 100,
-      child: Lottie.asset(LottieAnimationManager.loading),
+      child: kIsWeb
+          ? Center(
+              child: Text(
+                "Loading...",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          : Lottie.asset(LottieAnimationManager.loading),
     );
   }
 }

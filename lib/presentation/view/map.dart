@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../view_model/map_view_model.dart';
 import '../widgets/floating_action_buttons.dart';
 import '../widgets/floating_search_bar.dart';
-import '../widgets/loding_indicator.dart';
+import '../widgets/loading_indicator.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key, required this.mapController});
